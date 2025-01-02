@@ -1,9 +1,76 @@
  // find the total users have  tags enim
-[{
+[
+  {
       $match: {
         "tags" : "enim"
-      }
-} , {
-$count : 'totalEnimTags'
-  }
+              }
+  } , 
+ {
+     $count : 'totalEnimTags'
+ }
 ]
+// find the total user have tags enim and are active 
+
+[
+  {
+      $match: {
+        tags : "enim" , isActive : true
+              }
+  } , 
+ {
+     $count : 'totalEnimTags'
+ }
+]
+/// showing the name and age only 
+
+[
+  {
+    $match: {
+      tags: "enim",
+    },
+  },
+  {
+    $project: {
+      name: 1,
+      age: 1,
+    },
+  },
+]
+
+The $project stage in MongoDB's aggregation pipeline is used to include, exclude, or transform fields in the documents that pass through it. Its primary purpose is to shape the output of documents by controlling which fields are present and how they are displayed.
+
+//Useful when you want to provide more meaningful or standardized field names
+
+{
+  "$project": {
+    "fullName": "$name",
+    "userAge": "$age"
+  }
+}
+
+//Perform mathematical, conditional, or string operations.
+
+{
+  "$project": {
+    "name": 1,
+    "ageInMonths": { "$multiply": ["$age", 12] }
+  }
+}
+
+// practise
+[
+  {
+    $match: {
+      tags: "enim",
+    },
+  },
+  {
+    $project: {
+      name: 1,
+      age: 1,
+      multipleBy2 : {$multiply : ["$age" , 2]}
+    },
+  },
+]
+
+
