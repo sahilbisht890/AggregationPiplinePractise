@@ -1,0 +1,22 @@
+
+# Avg tags per user
+[
+  {
+    $unwind : "$tags"
+  }, {
+    $group: {
+      _id:"$_id" ,
+      totalTags: {
+        $sum : 1
+      }
+    }
+  },
+  {
+     $group: {
+       _id: null,
+        averageTags : {
+          $avg : "$totalTags"
+        } 
+     }
+  }
+]
