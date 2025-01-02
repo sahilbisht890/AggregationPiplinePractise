@@ -1,0 +1,9 @@
+ // find the total users have  tags enim
+[{
+      $match: {
+        "tags" : "enim"
+      }
+} , {
+$count : 'totalEnimTags'
+  }
+]
