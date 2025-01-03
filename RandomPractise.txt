@@ -1,0 +1,171 @@
+// Ques : find the user having the longest name 
+[
+  {
+    $addFields: {
+      nameLength: {
+        $strLenCP: "$name",
+      },
+    },
+  },
+  {
+    $sort: {
+      nameLength: 1,
+    },
+  },
+  {
+    $limit: -1,
+  },
+]
+--------------------------------------------->>>>>
+--------------------------------------------->>>>>
+
+Questions 
+
+1. How can you calculate the average age of all users whose `eyeColor` is green?  
+2. Find the most common `favoriteFruit` among users.  
+3. Identify the top 3 most frequently used `tags` across all documents.  
+4. How can you determine the total number of users registered in 2015?  
+5. Retrieve a list of unique countries where companies are located.  
+6. Find the earliest registration date among all users.  
+7. How can you count the number of users whose `nameLength` is greater than 5?  
+8. Retrieve the `name` and `company.title` of users who live in Italy.  
+9. Find the total number of users grouped by `eyeColor` and sort the results in descending order.  
+10. Calculate the average `nameLength` for each `favoriteFruit`.  
+
+solutions 
+--------------------------------------------->>>>>
+--------------------------------------------->>>>>
+
+1 : 
+ [
+  {
+    $match: {
+      eyeColor: "green",
+    },
+  },
+  {
+    $count: "TotalUser",
+  },
+]
+
+or 
+
+[
+  {
+    $group: {
+      _id: "$eyeColor",
+      TotalUser: {
+        $sum: 1,
+      },
+    },
+  },
+  {
+    $match: {
+      _id: "green",
+    },
+  },
+]
+
+2 : Same logic used in the question 1 , just replace eyeColor with the favouriteFruit 
+
+3 : 
+[
+  {
+    $unwind: "$tags",
+  },
+  {
+    $group: {
+      _id: "$tags",
+      TotalTags: {
+        $sum: 1,
+      },
+    },
+  },
+  {
+    $sort: {
+      TotalTags: -1,
+    },
+  },
+  {
+    $limit: 3,
+  },
+]
+
+4 : [
+  {
+    $match: {
+      $expr: {
+        $eq: [{ $year: "$registered" }, 2015],
+      },
+    },
+  },
+  {
+    $count: "userRegisteredIn2015",
+  },
+]
+
+5 : 
+[
+  {
+    $group: {
+      _id: "$company.location.country",
+    },
+  },
+]
+6 : 
+[
+  {
+    $sort: {
+      registered: 1,
+    },
+  },
+  {
+    $project: {
+      registered: 1,
+    },
+  },
+  {
+    $limit: 1,
+  },
+]
+
+
+7 : 
+[
+  {
+    $addFields: {
+      nameLength: {
+        $strLenCP: "$name",
+      },
+    },
+  },
+  {
+    $match: {
+      $expr: {
+        $gt: ["$nameLength", 5],
+      },
+    },
+  },
+]
+
+8 :
+[
+  {
+    $match: {
+      "company.location.country": "USA",
+    },
+  },
+  {
+    $addFields: {
+      companyName: "$company.title",
+    },
+  },
+  {
+    $project: {
+      name: 1,
+      companyName: 1,
+    },
+  },
+]
+9 & 10 -> same logic have been used in previous questions
+
