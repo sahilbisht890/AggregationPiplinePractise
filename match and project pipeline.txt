@@ -72,5 +72,23 @@ The $project stage in MongoDB's aggregation pipeline is used to include, exclude
     },
   },
 ]
+Ques :: getting the author details of the book
+[
+  {
+    $lookup: {
+      from: "authors",
+      localField: "author_id",
+      foreignField: "_id",
+      as: "author_details",
+    },
+  },
+  {
+    $addFields: {
+      authorDetails: {
+        $arrayElemAt: ["$author_details", 0],
+      },
+    },
+  },
+]
 
 
