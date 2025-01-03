@@ -1,0 +1,53 @@
+Ques :: Group the users according to favourtie fruit
+
+[
+  {
+    $group: {
+      _id: "$favoriteFruit",
+      usersList: {
+        $push: "$name",
+      },
+    },
+  },
+]
+
+
+Ques :: Total Users have 'ad' as the second tags 
+
+[
+  {
+    $match: {
+      "tags.1": "ad",
+    },
+  },
+  {
+    $count: "totalUsers",
+  },
+]
+
+Ques :: Users having both tags 'ad' and 'enim'
+
+[
+  {
+    $match: {
+      tags: { $all: ["enim", "ad"] },
+    },
+  },
+]
+Ques :: List all companies located in  the USA with thier corresponding  user count
+
+[
+  {
+    $match: {
+      "company.location.country": "USA",
+    },
+  },
+  {
+    $group: {
+      _id: "$company.title",
+      TotalUser: {
+        $sum: 1,
+      },
+    },
+  },
+]
